@@ -1,0 +1,29 @@
+kind: ClusterRole 
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: scale-deploy
+  namespace: default
+rules:
+- apiGroups: ["apps","extensions",""]
+  resources: ["pods","deployments","replicasets","deployments/scale"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps","extensions"]
+  resources: ["deployments/scale"]
+  verbs: ["patch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: scale-deploy
+  namespace: default
+subjects:
+- kind: User
+  name: cxtenberge5@gmail.com
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole #this must be Role or ClusterRole
+  name: scale-deploy
+  apiGroup: rbac.authorization.k8s.io

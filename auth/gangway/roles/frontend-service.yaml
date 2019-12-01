@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # comment or delete the following line if you want to use a LoadBalancer
+  type: ClusterIP
+  # if your cluster supports it, uncomment the following to automatically create
+  # an external load-balanced IP for the frontend service.
+  # type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: guestbook
+    tier: frontend
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: contour
+    kubernetes.io/tls-acme: "true"
+    external-dns.alpha.kubernetes.io/hostname: frontend.tenberge.io
+    external-dns.alpha.kubernetes.io/target: a7d1cbd97566f4592b4aafb19cb1c578-1887770219.us-east-1.elb.amazonaws.com
+spec:
+  tls:
+  - secretName: frontend-tls
+    hosts:
+    - frontend.tenberge.io
+  rules:
+  - host: frontend.tenberge.io
+    http:
+      paths:
+      - backend:
+          serviceName: frontend
+          servicePort: 80

@@ -1,0 +1,58 @@
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: contour
+    kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - dex.tenberge.io
+  tls:
+    - secretName: dex-example-tls
+      hosts:
+        - dex.tenberge.io
+
+config:
+  issuer: https://dex.tenberge.io/
+  storage:
+    type: kubernetes
+    config:
+      inCluster: true
+  logger:
+    level: debug
+  web:
+    # port is taken from ports section above
+    address: 0.0.0.0
+    tlsCert: /etc/dex/tls/https/server/tls.crt
+    tlsKey: /etc/dex/tls/https/server/tls.key
+  connectors:
+  - type: github
+    id: github
+    name: GitHub
+    config:
+      clientID: 59b7eebae7737d40e30c
+      clientSecret: 406f4e7af60108ce3eec4337d437cb8d43b2794f
+      redirectURI: https://dex.tenberge.io/callback
+      org: kubernetes
+  oauth2:
+    alwaysShowLoginScreen: false
+    skipApprovalScreen: true
+
+  staticClients:
+  - id: gangway
+    redirectURIs:
+    - 'https://gangway.tenberge.io/callback'
+    name: 'Gangway'
+    secret: supersecret
+
+  enablePasswordDB: true
+  staticPasswords:
+   - email: "cxtenberge5@gmail.com"
+     # bcrypt hash of the string "password"
+     hash: "$2y$12$6GVbtW/DCnbWBWsmJFyiuurbQry2wY4hn9NG0pMtcV23lNMPxal5q"
+     username: "admin"
+     userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
+
+# frontend:
+#   logoURL: https://example.com/yourlogo.png

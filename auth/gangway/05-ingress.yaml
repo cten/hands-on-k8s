@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gangway
+  namespace: gangway
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: contour
+    kubernetes.io/tls-acme: "true"
+spec:
+  tls:
+  - secretName: gangway
+    hosts:
+    - gangway.tenberge.io
+  rules:
+  - host: gangway.tenberge.io
+    http:
+      paths:
+      - backend:
+          serviceName: gangwaysvc
+          servicePort: http

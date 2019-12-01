@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gangway
+  namespace: gangway
+data:
+  gangway.yaml: |
+    clusterName: "CTclass"
+    authorizeURL: "https://dex.tenberge.io/auth"
+    tokenURL: "https://dex.tenberge.io/token"
+    redirectURL: "https://gangway.tenberge.io/callback"
+    clientID: "gangway"
+    clientSecret: "supersecret"
+    usernameClaim: "email"
+    emailClaim: "email"
+    scopes: ["openid", "profile", "email", "offline_access"]
+    apiServerURL: "https://api.caleb-testing-12345.tenberge.io"
