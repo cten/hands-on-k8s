@@ -4,6 +4,8 @@ metadata:
   name: gangway
   namespace: gangway
   annotations:
+    external-dns.alpha.kubernetes.io/hostname: gangway.tenberge.io
+    external-dns.alpha.kubernetes.io/target: <ELB A Record> 
     cert-manager.io/cluster-issuer: letsencrypt-prod
     ingress.kubernetes.io/force-ssl-redirect: "true"
     kubernetes.io/ingress.class: contour
@@ -19,4 +21,4 @@ spec:
       paths:
       - backend:
           serviceName: gangwaysvc
-          servicePort: http
+          servicePort: 80
