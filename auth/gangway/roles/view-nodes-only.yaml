@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: node-read-only
 rules:
-- apiGroups: ["core/v1"]
+- apiGroups: [""]
   resources: ["nodes"]
   verbs: ["get", "watch", "list"]
 ---
