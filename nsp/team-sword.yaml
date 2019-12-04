@@ -1,5 +1,10 @@
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-sword
+---
+apiVersion: v1
 kind: Pod
 metadata:
   name: sword
