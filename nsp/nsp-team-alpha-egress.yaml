@@ -1,26 +1,25 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: team-ax-egress
-  namespace: team-ax
+  name: team-alpha-egress
+  namespace: a-ns
 spec:
   # pod(s) this policy "applies" to
   podSelector:
     matchLabels:
-      app: ax
+      app: alpha
   policyTypes:
   - Egress
   egress:
   - to:
     - namespaceSelector:
         matchLabels:
-          name: team-sword
+          namespace: b-ns
       podSelector:
         matchLabels:
-          app: sword
+          app: beta
   - to:
-    - ipBlock:
-        cidr: 100.0.0.0/8
+    - namespaceSelector: {}
     ports:
     - protocol: UDP
       port: 53

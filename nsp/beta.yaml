@@ -1,13 +1,17 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: b-ns
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sword
-  namespace: team-sword
+  name: beta
+  namespace: b-ns
   labels:
-    app: sword
+    app: beta
     run: nginx
-    team: sword
+    team: beta
 spec:
   containers:
     - name: nginx
@@ -18,8 +22,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sword
-  namespace: team-sword
+  name: beta
+  namespace: b-ns
 spec:
   ports:
   - port: 80
@@ -27,4 +31,4 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: sword
+    app: beta

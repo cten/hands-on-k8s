@@ -1,0 +1,63 @@
+apiVersion: cluster.x-k8s.io/v1alpha2
+kind: MachineDeployment
+metadata:
+  name: caleb-worker
+  labels:
+    cluster.x-k8s.io/cluster-name: caleb
+    # Labels beyond this point are for example purposes,
+    # feel free to add more or change with something more meaningful.
+    # Sync these values with spec.selector.matchLabels and spec.template.metadata.labels.
+    nodepool: nodepool-0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      cluster.x-k8s.io/cluster-name: caleb
+      nodepool: nodepool-0
+  template:
+    metadata:
+      labels:
+        cluster.x-k8s.io/cluster-name: caleb
+        nodepool: nodepool-0
+    spec:
+      version: v1.15.3
+      bootstrap:
+        configRef:
+          name: caleb-worker
+          apiVersion: bootstrap.cluster.x-k8s.io/v1alpha2
+          kind: KubeadmConfigTemplate
+      infrastructureRef:
+        name: caleb-worker
+        apiVersion: infrastructure.cluster.x-k8s.io/v1alpha2
+        kind: AWSMachineTemplate
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha2
+kind: AWSMachineTemplate
+metadata:
+  name: caleb-worker
+spec:
+  template:
+    spec:
+      instanceType: t3.small
+      # This IAM profile is part of the pre-requisites.
+      iamInstanceProfile: "nodes.cluster-api-provider-aws.sigs.k8s.io"
+      # Change this value to a valid SSH Key Pair present in your AWS Account.
+      sshKeyName: hands-on-k8s
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1alpha2
+kind: KubeadmConfigTemplate
+metadata:
+  name: caleb-worker
+spec:
+  template:
+    spec:
+      # For more information about these values,
+      # refer to the Kubeadm Bootstrap Provider documentation.
+      joinConfiguration:
+        nodeRegistration:
+          name: '{{ ds.meta_data.hostname }}'
+          kubeletExtraArgs:
+            cloud-provider: aws
+            authentication-token-webhook: "true"
+            authorization-mode: Webhook
+            anonymous-auth: "false"

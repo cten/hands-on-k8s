@@ -1,13 +1,17 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: a-ns
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ax
-  namespace: team-ax
+  name: alpha
+  namespace: a-ns
   labels:
-    app: ax
+    app: alpha
     run: nginx
-    team: ax
+    team: alpha
 spec:
   containers:
     - name: nginx
@@ -18,8 +22,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ax
-  namespace: team-ax
+  name: alpha
+  namespace: a-ns
 spec:
   ports:
   - port: 80
@@ -27,4 +31,4 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: ax
+    app: alpha
